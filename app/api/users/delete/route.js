@@ -6,13 +6,10 @@ export async function POST(req) {
         console.log(req);
         const formData = await req.formData();
 
-        let username = formData.get("username");
-        let password = formData.get("password");
+        //Delete user
 
-        let res = await createUser({ username, password }).then((data) => {
-            console.log(data);
-            return data;
-        });
+        res = { status: 200, message: "User deleted successfully" };
+
         return Response.json({ res });
     } catch (error) {
         console.log(error);
