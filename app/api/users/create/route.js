@@ -1,3 +1,5 @@
+import { createUser } from "@/app/actions/createUser";
+
 export const revalidate = 0;
 
 export async function POST(req) {
