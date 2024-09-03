@@ -7,14 +7,14 @@ import { eq } from "drizzle-orm/expressions";
 import { users } from "../drizzle/userSchema";
 import { generateToken } from "@/utils/jwt";
 
-export async function loginUser({ username, password }) {
+export async function loginUser({ email, password }) {
     console.log("Logging in user");
     try {
         const sql = neon(process.env.DATABASE_URL);
         const db = drizzle(sql, { users });
 
         // Fetch user by username
-        let user = await db.select().from(users).where(eq(users.username, username));
+        let user = await db.select().from(users).where(eq(users.email, username));
 
         if (!user) {
             return { status: 401, error: "Invalid credentials" };
@@ -32,7 +32,7 @@ export async function loginUser({ username, password }) {
         }
 
         // Generate JWT
-        const token = generateToken({ id: user.id, username: user.username });
+        const token = generateToken({ id: user.id, email: user.email });
 
         return { status: 200, token };
     } catch (error) {
