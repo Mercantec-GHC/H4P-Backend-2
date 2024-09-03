@@ -13,6 +13,14 @@ export async function createUser({ email, password }) {
 
         const db = drizzle(sql, { users });
 
+        //Make sure it has an email and password
+        if (!email || !password) {
+            return { status: 400, error: "Missing email or password" };
+        }
+
+        //Make sure there is a email table if not then create one
+        await db.createTable(users).ifNotExists().run();
+
         //Check if user exists
         const user = await db.select(users).where({ email: email }).run();
 
