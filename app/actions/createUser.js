@@ -19,7 +19,7 @@ export async function createUser({ email, password }) {
         }
 
         //Check if user exists
-        const user = await db.select(users).where({ email: email }).run();
+        const user = await db.select().from(users).where({ email });
 
         if (user.length > 0) {
             return { status: 400, error: "User already exists" };
