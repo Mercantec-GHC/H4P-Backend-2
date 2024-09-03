@@ -13,6 +13,11 @@ export async function loginUser({ email, password }) {
         const sql = neon(process.env.DATABASE_URL);
         const db = drizzle(sql, { users });
 
+        // Check if email has %40 instead of @
+        if (email.includes("%40")) {
+            email = email.replace("%40", "@");
+        }
+
         // Fetch user by username
         let user = await db.select().from(users).where(eq(users.email, email));
 
