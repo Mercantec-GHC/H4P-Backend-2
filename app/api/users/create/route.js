@@ -8,10 +8,10 @@ export async function POST(req) {
         console.log(req);
         const formData = await req.formData();
 
-        let username = formData.get("username");
+        let email = formData.get("email");
         let password = formData.get("password");
 
-        let res = await createUser({ username, password }).then((data) => {
+        let res = await createUser({ email, password }).then((data) => {
             console.log(data);
             return data;
         });

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { drizzle } from "drizzle-orm/neon-http";
 import { users } from "../drizzle/userSchema";
 
-export async function createUser({ username, password }) {
+export async function createUser({ email, password }) {
     try {
         const sql = neon(process.env.DATABASE_URL);
 
@@ -13,10 +13,15 @@ export async function createUser({ username, password }) {
 
         const db = drizzle(sql, { users });
 
+        //Check if user exists
+        const user = await db.select(users).where({ email: email }).run();
+
+        if (user.length > 0) {
+            return { status: 400, error: "User already exists" };
+        }
+
         //Add user
-        const data = await db
-            .insert(users)
-            .values({ username: username, password: hashedPassword });
+        const data = await db.insert(users).values({ email: email, password: hashedPassword });
 
         return { status: 200, data };
     } catch (error) {
