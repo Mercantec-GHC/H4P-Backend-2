@@ -26,7 +26,9 @@ export async function createUser({ email, password }) {
         }
 
         //Add user
-        const data = await db.insert(users).values({ email: email, password: hashedPassword });
+        const data = await db
+            .insert(users)
+            .values({ username: "", email: email, password: hashedPassword });
 
         return { status: 200, data };
     } catch (error) {
