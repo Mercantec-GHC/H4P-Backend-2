@@ -14,7 +14,7 @@ export async function loginUser({ email, password }) {
         const db = drizzle(sql, { users });
 
         // Fetch user by username
-        let user = await db.select().from(users).where(eq(users.email, username));
+        let user = await db.select().from(users).where(eq(users.email, email));
 
         if (!user) {
             return { status: 401, error: "Invalid credentials" };
