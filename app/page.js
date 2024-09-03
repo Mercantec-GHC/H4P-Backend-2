@@ -12,7 +12,7 @@ export default async function Page() {
                 {data.map((user) => (
                     <li key={user.id}>
                         <div>
-                            <h2>{user.username}</h2>
+                            <h2>{user.email}</h2>
                             <p>{user.password}</p>
                         </div>
                     </li>

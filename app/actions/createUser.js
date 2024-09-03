@@ -20,6 +20,16 @@ export async function createUser({ email, password }) {
             return { status: 400, error: "Missing email or password" };
         }
 
+        if (password.length < 8) {
+            return { status: 400, error: "Password must be at least 8 characters" };
+        }
+
+        //Check format for email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return { status: 400, error: "Invalid email format" };
+        }
+
         //Check if user exists
         let user = await db.select().from(users).where(eq(users.email, email));
 
