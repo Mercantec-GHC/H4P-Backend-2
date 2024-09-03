@@ -4,6 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcrypt";
 import { drizzle } from "drizzle-orm/neon-http";
 import { users } from "../drizzle/userSchema";
+import { eq } from "drizzle-orm/expressions";
 
 export async function createUser({ email, password }) {
     console.log("Creating user", email);
@@ -19,10 +20,17 @@ export async function createUser({ email, password }) {
             return { status: 400, error: "Missing email or password" };
         }
 
+        //Check if user exists
+        let user = await db.select().from(users).where(eq(users.email, email));
+
+        if (user.length > 0) {
+            return { status: 400, error: "User already exists" };
+        }
+
         //Add user
         const data = await db
             .insert(users)
-            .values({ username: "", password: hashedPassword, email });
+            .values({ username: "", password: hashedPassword, email: email });
 
         return { status: 200, data };
     } catch (error) {
