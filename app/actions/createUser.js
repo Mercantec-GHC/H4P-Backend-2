@@ -17,24 +17,24 @@ export async function createUser({ email, password }) {
 
         //Make sure it has an email and password
         if (!email || !password) {
-            return { status: 400, error: "Missing email or password" };
+            return new Response("Email and password are required", { status: 400 });
         }
 
         if (password.length < 8) {
-            return { status: 400, error: "Password must be at least 8 characters" };
+            return new Response("Password must be at least 8 characters", { status: 400 });
         }
 
         //Check format for email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return { status: 400, error: "Invalid email format" };
+            return new Response("Invalid email format", { status: 400 });
         }
 
         //Check if user exists
         let user = await db.select().from(users).where(eq(users.email, email));
 
         if (user.length > 0) {
-            return { status: 400, error: "User already exists" };
+            return new Response("User already exists", { status: 400 });
         }
 
         //Add user
@@ -42,9 +42,10 @@ export async function createUser({ email, password }) {
             .insert(users)
             .values({ username: "", password: hashedPassword, email: email });
 
-        return { status: 200, data };
+        return new Response({ status: 200, data });
     } catch (error) {
         console.log(error);
-        return { status: 500, error };
+        //Stop here and return error to the route handler
+        throw error;
     }
 }

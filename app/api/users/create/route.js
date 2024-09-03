@@ -15,9 +15,20 @@ export async function POST(req) {
             console.log(data);
             return data;
         });
-        return Response.json({ res });
+        //Get the status from res
+        return new Response(JSON.stringify({ status: res.status, data: res.data }), {
+            status: res.status,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     } catch (error) {
         console.log(error);
-        return Response.error({ error });
+        return new Response(JSON.stringify({ error }), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     }
 }
