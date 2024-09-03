@@ -15,6 +15,11 @@ export async function createUser({ email, password }) {
 
         const db = drizzle(sql, { users });
 
+        //Check if email has %40 instead of @
+        if (email.includes("%40")) {
+            email = email.replace("%40", "@");
+        }
+
         //Make sure it has an email and password
         if (!email || !password) {
             return new Response("Email and password are required", { status: 400 });
