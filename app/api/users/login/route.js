@@ -5,8 +5,8 @@ export async function POST(req) {
     try {
         const formData = await req.formData();
 
-        let username = formData.get("email");
-        console.log(username);
+        let email = formData.get("email");
+        console.log(email);
         let password = formData.get("password");
         console.log(password);
 
