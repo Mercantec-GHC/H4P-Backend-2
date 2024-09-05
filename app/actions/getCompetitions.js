@@ -6,6 +6,9 @@ import { competition } from "../drizzle/competitionSchema";
 import { eq } from "drizzle-orm/expressions";
 
 export async function getCompetitions({ userId }) {
+    if (!userId) {
+        return [];
+    }
     try {
         console.log("Getting competitions for user", userId);
         const sql = neon(process.env.DATABASE_URL);
