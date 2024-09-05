@@ -15,3 +15,9 @@ export function verifyToken(token) {
         return null;
     }
 }
+
+//Get userId from token
+export function getUserIdFromToken(token) {
+    const decoded = jwt.decode(token);
+    return decoded ? decoded.userId : null;
+}

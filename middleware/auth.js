@@ -1,6 +1,6 @@
 // middleware/auth.js
 
-import { verifyToken } from "@/utils/jwt";
+import { getUserIdFromToken, verifyToken } from "@/utils/jwt";
 
 export function authenticate(req) {
     const authHeader = req.headers.get("Authorization");
@@ -8,6 +8,7 @@ export function authenticate(req) {
     console.log(token);
 
     if (!token) {
+        console.log("No token provided");
         return new Response(JSON.stringify({ error: "No token provided" }), {
             status: 403,
             headers: {
@@ -19,6 +20,7 @@ export function authenticate(req) {
     const user = verifyToken(token);
 
     if (!user) {
+        console.log("Invalid token");
         return new Response(JSON.stringify({ error: "Invalid token" }), {
             status: 403,
             headers: {
@@ -27,9 +29,11 @@ export function authenticate(req) {
         });
     }
 
+    console.log("User authenticated", user);
+
     // Attach user info to the request if needed
     req.user = user;
 
     // Proceed with the request
-    return null; // or you can return a success response, but typically you'd return null here to indicate success
+    return user;
 }

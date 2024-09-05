@@ -21,7 +21,6 @@ import { competition } from "../drizzle/competitionSchema";
  */
 
 export async function createCompetition({ competitionData }) {
-    console.log(competitionData);
     try {
         const sql = neon(process.env.DATABASE_URL);
         const db = drizzle(sql, { competition });
@@ -29,8 +28,6 @@ export async function createCompetition({ competitionData }) {
         let title = competitionData.title;
         let description = competitionData.description;
         let ownerId = competitionData.ownerId;
-        let startDate = competitionData.startDate;
-        let endDate = competitionData.endDate;
         let targetDistance = competitionData.targetDistance;
 
         //Check if all required fields are present
@@ -52,7 +49,11 @@ export async function createCompetition({ competitionData }) {
             targetDistance: targetDistance,
         });
 
-        console.log(data);
+        if (!data) {
+            return new Response("Error creating competition", { status: 500 });
+        }
+
+        console.log("Competition created");
 
         return new Response({ status: 200, data });
     } catch (error) {

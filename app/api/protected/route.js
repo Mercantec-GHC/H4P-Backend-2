@@ -1,13 +1,16 @@
 import { authenticate } from "@/middleware/auth";
 
 export async function POST(req) {
-    const authResponse = authenticate(req);
+    const user = authenticate(req);
 
-    if (authResponse) {
-        return authResponse; // This will return the error response from authenticate if the token is invalid
+    if (!user) {
+        return new Response(JSON.stringify({ error: "Authentication failed" }), {
+            status: 403,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     }
-
-    console.log("You are authenticated");
 
     // If authentication is successful, proceed with the protected logic
     return new Response(JSON.stringify({ message: "You are authenticated" }), {
