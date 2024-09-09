@@ -6,7 +6,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { users } from "../drizzle/userSchema";
 import { eq } from "drizzle-orm/expressions";
 
-export async function createUser({ email, password }) {
+export async function createUser({ email, username, password }) {
     console.log("Creating user", email);
     try {
         const sql = neon(process.env.DATABASE_URL);
@@ -36,16 +36,23 @@ export async function createUser({ email, password }) {
         }
 
         //Check if user exists
-        let user = await db.select().from(users).where(eq(users.email, email));
+        let emailExist = await db.select().from(users).where(eq(users.email, email));
 
-        if (user.length > 0) {
+        if (emailExist.length > 0) {
             return new Response("User already exists", { status: 400 });
+        }
+
+        //Check if username exists
+        let usernameExist = await db.select().from(users).where(eq(users.username, username));
+
+        if (usernameExist.length > 0) {
+            return new Response("Username already exists", { status: 400 });
         }
 
         //Add user
         const data = await db
             .insert(users)
-            .values({ username: "", password: hashedPassword, email: email });
+            .values({ username: username, password: hashedPassword, email: email });
 
         return new Response({ status: 200, data });
     } catch (error) {
