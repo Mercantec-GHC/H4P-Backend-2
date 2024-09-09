@@ -69,12 +69,18 @@ export async function createInvitation({ ownerId, username, competitionId }) {
         });
 
         if (!newInvitation) {
-            return new Response("Error creating invitation", { status: 500 });
+            return new Response("Error creating invitation", {
+                status: 500,
+                statusText: "Error creating invitation",
+            });
         }
 
         console.log("Invitation created");
 
-        return new Response({ status: 200, statusText: "Invitation created" });
+        return new Response("Invitation created", {
+            status: 200,
+            statusText: "Invitation created",
+        });
     } catch (error) {
         /* console.log(error); */
         //Stop here and return error to the route handler
