@@ -4,11 +4,11 @@ import { competition } from "./competitionSchema";
 
 const invitations = pgTable("invitations", {
     id: serial("id").primaryKey(),
-    ownerId: serial("ownerId").references(users.id),
+    ownerId: serial("owner_id").references(users.id),
     username: text("username").references(users.username),
-    competitionId: serial("competitionId").references(competition.id),
-    status: boolean("status").notNull(),
-    createdAt: timestamp("createdAt").notNull(),
+    competitionId: serial("competition_id").references(competition.id),
+    status: boolean("status").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export { invitations };

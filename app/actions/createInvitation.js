@@ -20,21 +20,28 @@ export async function createInvitation({ ownerId, username, competitionId }) {
         if (!ownerId || !username || !competitionId) {
             return new Response("Owner Id, username, and competition Id are required", {
                 status: 400,
+                statusText: "Owner Id, username, and competition Id are required",
             });
         }
 
         //Check if username exists
-        /* let userNameExist = await db.select().from(users).where(eq(users.username, username));
+        let userNameExist = await db.select().from(users).where(eq(users.username, username));
 
         if (userNameExist.length === 0) {
             console.log("User does not exist");
-            return new Response("User does not exist", { status: 400 });
+            return new Response("User does not exist", {
+                status: 400,
+                statusText: "User does not exist",
+            });
         }
 
         //If userNameExist.id is same as ownerId, return error
         if (userNameExist[0].id === ownerId) {
             console.log("You cannot invite yourself");
-            return new Response("You cannot invite yourself", { status: 400 });
+            return new Response("You cannot invite yourself", {
+                status: 400,
+                statusText: "You cannot invite yourself",
+            });
         }
 
         //Check if user is already invited
@@ -46,21 +53,19 @@ export async function createInvitation({ ownerId, username, competitionId }) {
 
         if (userInvited.length > 0) {
             console.log("User already invited");
-            return new Response("User already invited", { status: 400 });
-        } */
-
-        /* const data = await db.insert(competition).values({
-            title: title,
-            description: description,
-            ownerId: ownerId,
-            targetDistance: targetDistance,
-        }); */
+            return new Response("User already invited", {
+                status: 400,
+                statusText: "User already invited",
+            });
+        }
 
         //Create new invitation
         const newInvitation = await db.insert(invitations).values({
             ownerId,
             username,
             competitionId,
+            status: false,
+            createdAt: new Date(),
         });
 
         if (!newInvitation) {
@@ -69,7 +74,7 @@ export async function createInvitation({ ownerId, username, competitionId }) {
 
         console.log("Invitation created");
 
-        return new Response({ status: 200, data });
+        return new Response({ status: 200, statusText: "Invitation created" });
     } catch (error) {
         /* console.log(error); */
         //Stop here and return error to the route handler

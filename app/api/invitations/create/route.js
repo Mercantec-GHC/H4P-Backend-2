@@ -30,14 +30,13 @@ export async function POST(req) {
 
         console.log(invitationData);
 
-        let res = await createInvitation(invitationData).then((data) => {
-            console.log(data);
-            return data;
-        });
+        let res = await createInvitation(invitationData);
+
+        console.log("Response from createInvitation", res);
 
         //Get the status from res
 
-        return new Response(JSON.stringify({ status: res.status, data: res.data }), {
+        return new Response(JSON.stringify({ status: res.status, message: res.statusText }), {
             status: res.status,
             headers: {
                 "Content-Type": "application/json",
