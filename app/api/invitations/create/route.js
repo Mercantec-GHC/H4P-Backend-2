@@ -1,10 +1,10 @@
 export const revalidate = 0;
 import { authenticate } from "@/middleware/auth";
+import { createInvitation } from "@/app/actions/createInvitation";
 
 export async function POST(req) {
     //Get body from request
     try {
-        console.log(req);
         const formData = await req.formData();
 
         const authResult = authenticate(req);
@@ -20,6 +20,8 @@ export async function POST(req) {
         let username = formData.get("username");
         let competitionId = formData.get("competitionId");
 
+        //Get the userId of the user being invited
+
         const invitationData = {
             ownerId,
             username,
@@ -28,14 +30,13 @@ export async function POST(req) {
 
         console.log(invitationData);
 
-        return new Response(JSON.stringify({ status: 200, data: invitationData }), {
-            status: 200,
-            headers: {
-                "Content-Type": "application/json",
-            },
+        let res = await createInvitation(invitationData).then((data) => {
+            console.log(data);
+            return data;
         });
 
         //Get the status from res
+
         return new Response(JSON.stringify({ status: res.status, data: res.data }), {
             status: res.status,
             headers: {
