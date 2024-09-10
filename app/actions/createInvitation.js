@@ -45,7 +45,7 @@ export async function createInvitation({ ownerId, username, competitionId }) {
         } */
 
         //Check if user is already invited
-        let userInvited = await db
+        /* let userInvited = await db
             .select()
             .from(invitations)
             .where(eq(invitations.username, username, invitations.competitionId, competitionId));
@@ -56,7 +56,7 @@ export async function createInvitation({ ownerId, username, competitionId }) {
                 status: 400,
                 statusText: "User already invited",
             });
-        }
+        } */
 
         //Create new invitation
         const newInvitation = await db.insert(invitations).values({
@@ -74,7 +74,7 @@ export async function createInvitation({ ownerId, username, competitionId }) {
             });
         }
 
-        console.log("Invitation created");
+        console.log("Invitation created", newInvitation);
 
         return new Response("Invitation created", {
             status: 200,
