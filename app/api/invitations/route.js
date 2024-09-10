@@ -1,12 +1,11 @@
-/* export const revalidate = 0;
+export const revalidate = 0;
+import { getInvitations } from "@/app/actions/getInvitations";
 import { authenticate } from "@/middleware/auth";
 
-export async function POST(req) {
+export async function GET(req) {
     //Get body from request
     try {
-        console.log(req);
-        const formData = await req.formData();
-
+        console.log("Getting invitations");
         const authResult = authenticate(req);
 
         if (authResult instanceof Response) {
@@ -16,23 +15,10 @@ export async function POST(req) {
 
         const user = authResult;
 
-        let ownerId = user.id;
-        let username = formData.get("username");
-        let competitionId = formData.get("competitionId");
+        let userId = user.id;
 
-        const invitationData = {
-            ownerId,
-            username,
-            competitionId,
-        };
-
-        console.log(invitationData);
-
-        return new Response(JSON.stringify({ status: 200, data: invitationData }), {
-            status: 200,
-            headers: {
-                "Content-Type": "application/json",
-            },
+        let res = await getInvitations({ userId }).then((data) => {
+            return data;
         });
 
         //Get the status from res
@@ -52,6 +38,5 @@ export async function POST(req) {
         });
     }
 }
- */
 
 //Get inviations from owned by a user by id

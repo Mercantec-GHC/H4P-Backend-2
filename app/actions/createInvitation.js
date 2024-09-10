@@ -36,23 +36,22 @@ export async function createInvitation({ ownerId, username, competitionId }) {
         }
 
         //If userNameExist.id is same as ownerId, return error
-        if (userNameExist[0].id === ownerId) {
+        /* if (userNameExist[0].id === ownerId) {
             console.log("You cannot invite yourself");
             return new Response("You cannot invite yourself", {
                 status: 400,
                 statusText: "You cannot invite yourself",
             });
-        }
+        } */
 
         //Check if user is already invited
         let userInvited = await db
             .select()
             .from(invitations)
-            .where(eq(invitations.username, username))
-            .where(eq(invitations.competitionId, competitionId));
+            .where(eq(invitations.username, username, invitations.competitionId, competitionId));
 
         if (userInvited.length > 0) {
-            console.log("User already invited");
+            console.log("User already invited", userInvited);
             return new Response("User already invited", {
                 status: 400,
                 statusText: "User already invited",
