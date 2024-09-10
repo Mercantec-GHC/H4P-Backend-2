@@ -27,6 +27,7 @@ export async function POST(req) {
             title,
             description,
             targetDistance,
+            startDate: new Date(),
         };
 
         let res = await createCompetition({ competitionData }).then((data) => {

@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import { drizzle } from "drizzle-orm/neon-http";
 import { invitations } from "../drizzle/invitationSchema";
 import { users } from "../drizzle/userSchema";
-import { eq } from "drizzle-orm/expressions";
+import { eq, and } from "drizzle-orm/expressions";
 
 export async function createInvitation({ ownerId, username, competitionId }) {
     console.log("Creating invitation", ownerId, username, competitionId);
@@ -45,10 +45,15 @@ export async function createInvitation({ ownerId, username, competitionId }) {
         } */
 
         //Check if user is already invited
-        /* let userInvited = await db
+        let userInvited = await db
             .select()
             .from(invitations)
-            .where(eq(invitations.username, username, invitations.competitionId, competitionId));
+            .where(
+                and(
+                    eq(invitations.username, username),
+                    eq(invitations.competitionId, competitionId)
+                )
+            );
 
         if (userInvited.length > 0) {
             console.log("User already invited", userInvited);
@@ -56,7 +61,7 @@ export async function createInvitation({ ownerId, username, competitionId }) {
                 status: 400,
                 statusText: "User already invited",
             });
-        } */
+        }
 
         //Create new invitation
         const newInvitation = await db.insert(invitations).values({
