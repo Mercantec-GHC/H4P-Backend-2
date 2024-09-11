@@ -11,7 +11,6 @@ const competition = pgTable("competition", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     targetDistance: integer("target_distance"),
     members: jsonb("members").notNull().default("[]"), // Assuming members is stored as a JSON array
-    invites: jsonb("invites").notNull().default("[]"), // Assuming invites is stored as a JSON array
 });
 
 export { competition };

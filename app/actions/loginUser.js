@@ -9,6 +9,7 @@ import { generateToken } from "@/utils/jwt";
 
 export async function loginUser({ email, password }) {
     console.log("Logging in user");
+    email = email.toLowerCase();
     try {
         const sql = neon(process.env.DATABASE_URL);
         const db = drizzle(sql, { users });

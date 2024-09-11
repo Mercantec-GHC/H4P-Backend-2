@@ -8,6 +8,10 @@ import { eq } from "drizzle-orm/expressions";
 
 export async function createUser({ email, username, password }) {
     console.log("Creating user", email);
+
+    //Convert email to lowercase
+    email = email.toLowerCase();
+
     try {
         const sql = neon(process.env.DATABASE_URL);
 
