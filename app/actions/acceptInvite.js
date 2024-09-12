@@ -106,7 +106,7 @@ export async function acceptInvite({ userId, invitationId }) {
         await db.update(users).set({ competitions: userCompetitions }).where(eq(users.id, userId));
 
         //Delete the invitation
-        //await db.delete(invitations).where(eq(invitations.id, invitationId));
+        await db.delete(invitations).where(eq(invitations.id, invitationId));
 
         console.log("Successfully accepted invitation");
         return new Response({ status: 200, data: res, statusText: "Invitation accepted" });
