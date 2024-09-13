@@ -40,7 +40,11 @@ export async function acceptInvite({ userId, invitationId }) {
 
         //Check if userId matches the invitation userId if not return error because only the user can accept
         if (userId !== invitationData[0].userId) {
-            console.log("Only the user can accept the invitation");
+            console.log(
+                "Only the user can accept the invitation",
+                userId,
+                invitationData[0].userId
+            );
             return new Response("Only the user can accept the invitation", {
                 status: 400,
                 statusText: "Only the user can accept the invitation",
@@ -106,7 +110,7 @@ export async function acceptInvite({ userId, invitationId }) {
         await db.update(users).set({ competitions: userCompetitions }).where(eq(users.id, userId));
 
         //Delete the invitation
-        //await db.delete(invitations).where(eq(invitations.id, invitationId));
+        await db.delete(invitations).where(eq(invitations.id, invitationId));
 
         console.log("Successfully accepted invitation");
         return new Response({ status: 200, data: res, statusText: "Invitation accepted" });
