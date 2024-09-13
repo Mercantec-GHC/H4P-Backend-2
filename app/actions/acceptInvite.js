@@ -39,7 +39,7 @@ export async function acceptInvite({ userId, invitationId }) {
         }
 
         //Check if userId matches the invitation userId if not return error because only the user can accept
-        if (userId !== invitationData[0].userId) {
+        /* if (userId !== invitationData[0].userId) {
             console.log(
                 "Only the user can accept the invitation",
                 userId,
@@ -49,7 +49,7 @@ export async function acceptInvite({ userId, invitationId }) {
                 status: 400,
                 statusText: "Only the user can accept the invitation",
             });
-        }
+        } */
 
         //Get the competition data
         let competitionData = await db
