@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { competition } from "../drizzle/competitionSchema";
 import { and, eq } from "drizzle-orm/expressions";
 import { getCompetitions } from "./getCompetitions";
+import { users } from "../drizzle/userSchema";
 
 //competition has a members field that is a JSON array. In this we add the progress of the user to the competition. When we update progress we add it to all competitions the user is a member of. Progress is a number that represents the distance the user has covered in the competition. So we add it to the already existing progress in the competition. If the user has not covered any distance yet we set the progress to the new progress.
 
@@ -44,7 +45,10 @@ export async function updateProgress({ userId, progress }) {
             progress = Number(progress);
 
             if (memberIndex === -1) {
-                members.push({ id: userId, progress });
+                //Find the user by ownerId of the competition
+                const userData = await db.select().from(users).where(eq(users.id, userId));
+
+                members.push({ id: userId, progress, username: userData[0].username });
             } else {
                 //If members.progress is null then set it to progress
                 if (!members[memberIndex].progress) {
@@ -55,11 +59,9 @@ export async function updateProgress({ userId, progress }) {
                     //Reset the progress to 0
                     //Convert members.progress to a number
                     members[memberIndex].progress = Number(members[memberIndex].progress);
-                    members[memberIndex].progress = 0;
                     members[memberIndex].progress += Number(progress);
                 } else {
                     members[memberIndex].progress = Number(members[memberIndex].progress);
-                    members[memberIndex].progress = 0;
                     members[memberIndex].progress = Number(progress);
                 }
             }
