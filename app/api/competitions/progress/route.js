@@ -22,18 +22,13 @@ export async function POST(req) {
 
         let userId = user.id;
 
-        console.log("Getting competitions for user", userId);
+        console.log("Updating progress", userId, progress);
 
         //Get all competitions and return them
 
-        updateProgress({ userId, progress });
+        let res = updateProgress({ userId, progress });
 
-        return new Response(JSON.stringify({ data: "Progress updated" }), {
-            status: 200,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        return res;
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({ error }), {

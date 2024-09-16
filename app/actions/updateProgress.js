@@ -26,6 +26,13 @@ export async function updateProgress({ userId, progress }) {
 
         let competitions = await getCompetitions({ userId: userId });
 
+        if (competitions.length === 0) {
+            return new Response("No competitions found", {
+                status: 404,
+                statusText: "No competitions found",
+            });
+        }
+
         console.log("Competitions", competitions);
 
         //Add the progress to each competition
@@ -45,22 +52,33 @@ export async function updateProgress({ userId, progress }) {
             progress = Number(progress);
 
             if (memberIndex === -1) {
+                console.log("Member not found", userId);
                 //Find the user by ownerId of the competition
                 const userData = await db.select().from(users).where(eq(users.id, userId));
+                if (userData.length === 0) {
+                    return new Response("User not found", {
+                        status: 404,
+                        statusText: "User not found",
+                    });
+                }
 
                 members.push({ id: userId, progress, username: userData[0].username });
             } else {
+                console.log("Member found", userId);
                 //If members.progress is null then set it to progress
                 if (!members[memberIndex].progress) {
+                    console.log("Progress is null", members[memberIndex].progress);
                     members[memberIndex].progress = Number(progress);
                 }
 
                 if (members[memberIndex].progress) {
+                    console.log("Progress is not null", members[memberIndex].progress);
                     //Reset the progress to 0
                     //Convert members.progress to a number
                     members[memberIndex].progress = Number(members[memberIndex].progress);
                     members[memberIndex].progress += Number(progress);
                 } else {
+                    console.log("Progress is null", members[memberIndex].progress);
                     members[memberIndex].progress = Number(members[memberIndex].progress);
                     members[memberIndex].progress = Number(progress);
                 }
