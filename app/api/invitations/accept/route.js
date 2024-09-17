@@ -14,10 +14,12 @@ export async function POST(req) {
 
         const user = authResult;
 
-        let res = acceptInvite({
+        let res = await acceptInvite({
             userId: user.id,
             invitationId: formData.get("invitationId"),
         });
+
+        console.log(res);
 
         return new Response(JSON.stringify({ status: res.status, message: res.statusText }), {
             status: res.status,
