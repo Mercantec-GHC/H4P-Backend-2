@@ -5,6 +5,7 @@ import { authenticate } from "@/middleware/auth";
 
 export async function POST(req) {
     try {
+        console.log("Revived request for competitions progress update");
         const formData = await req.formData();
 
         let progress = formData.get("progress");
