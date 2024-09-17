@@ -69,18 +69,18 @@ export async function updateProgress({ userId, progress }) {
                 if (!members[memberIndex].progress) {
                     console.log("Progress is null", members[memberIndex].progress);
                     members[memberIndex].progress = Number(progress);
-                }
-
-                if (members[memberIndex].progress) {
-                    console.log("Progress is not null", members[memberIndex].progress);
-                    //Reset the progress to 0
-                    //Convert members.progress to a number
-                    members[memberIndex].progress = Number(members[memberIndex].progress);
-                    members[memberIndex].progress += Number(progress);
                 } else {
-                    console.log("Progress is null", members[memberIndex].progress);
-                    members[memberIndex].progress = Number(members[memberIndex].progress);
-                    members[memberIndex].progress = Number(progress);
+                    if (members[memberIndex].progress) {
+                        console.log("Progress is not null", members[memberIndex].progress);
+                        //Reset the progress to 0
+                        //Convert members.progress to a number
+                        members[memberIndex].progress = Number(members[memberIndex].progress);
+                        members[memberIndex].progress += Number(progress);
+                    } else {
+                        console.log("Progress is null", members[memberIndex].progress);
+                        members[memberIndex].progress = Number(members[memberIndex].progress);
+                        members[memberIndex].progress = Number(progress);
+                    }
                 }
             }
 

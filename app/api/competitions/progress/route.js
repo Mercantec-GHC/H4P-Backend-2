@@ -27,7 +27,7 @@ export async function POST(req) {
 
         //Get all competitions and return them
 
-        let res = updateProgress({ userId, progress });
+        let res = await updateProgress({ userId, progress });
 
         return res;
     } catch (error) {
